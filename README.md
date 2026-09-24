@@ -12,5 +12,4 @@ Features:
 - Edit Task
 - Delete Task
 - Update Status
-- Delete Task
 - Dashboard
