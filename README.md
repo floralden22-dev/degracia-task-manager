@@ -1,7 +1,10 @@
-Project Code: WST21-PM-2026-SF
+Project Code: WST21-PM-2026-SF 
+
 Student Name: Floralden De Gracia
+
 Course & Year: BSIT - 2
-Database Used: SQLite
+
+Database Used: SQL
 
 Features:
 - Add Task
@@ -9,3 +12,5 @@ Features:
 - Edit Task
 - Delete Task
 - Update Status
+- Delete Task
+- Dashboard
