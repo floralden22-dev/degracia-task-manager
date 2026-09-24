@@ -11,7 +11,23 @@ class TaskController extends Controller
     {
         $tasks = Task::orderBy('due_date')->get();
 
-        return view('tasks.index', compact('tasks'));
+        $totalTasks = $tasks->count();
+        $pendingTasks = $tasks->where('status', 'Pending')->count();
+        $completedTasks = $tasks->where('status', 'Completed')->count();
+
+        $overdueTasks = $tasks->filter(function ($task) {
+            return $task->due_date &&
+                   $task->status === 'Pending' &&
+                   $task->due_date < now()->toDateString();
+        })->count();
+
+        return view('tasks.index', compact(
+            'tasks',
+            'totalTasks',
+            'pendingTasks',
+            'completedTasks',
+            'overdueTasks'
+        ));
     }
 
     public function create()
@@ -31,7 +47,7 @@ class TaskController extends Controller
         Task::create($validated);
 
         return redirect('/tasks')
-            ->with('success', 'Task added successfully!');
+            ->with('success', 'Task has been added to your list.');
     }
 
     public function show(Task $task)
@@ -56,7 +72,7 @@ class TaskController extends Controller
         $task->update($validated);
 
         return redirect('/tasks')
-            ->with('success', 'Task updated successfully!');
+            ->with('success', 'Task details have been updated.');
     }
 
     public function destroy(Task $task)
@@ -64,6 +80,6 @@ class TaskController extends Controller
         $task->delete();
 
         return redirect('/tasks')
-            ->with('success', 'Task deleted successfully!');
+            ->with('success', 'Task has been removed from your list.');
     }
 }

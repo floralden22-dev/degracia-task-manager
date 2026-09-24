@@ -3,12 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Tasks</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Dashboard - TaskList</title>
 
     <style>
         * {
@@ -18,259 +13,307 @@
         }
 
         body {
-            font-family: 'DM Sans', sans-serif;
-            min-height: 100vh;
-            background: #f5f3ee;
-            color: #30332f;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #eef1f3;
+            color: #263238;
         }
 
-        .header {
-            background: #ffffff;
-            border-bottom: 1px solid #e7e4dc;
-            padding: 22px 7%;
-        }
-
-        .header-inner {
-            max-width: 1100px;
-            margin: auto;
+        .layout {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 235px;
+            background: #173f43;
+            color: white;
+            padding: 30px 20px;
+            flex-shrink: 0;
         }
 
         .brand {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
-            color: #35433a;
+            letter-spacing: 1px;
+            margin-bottom: 45px;
+            padding-left: 10px;
         }
 
-        .brand span {
-            color: #718579;
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
 
-        .container {
-            width: min(1100px, 90%);
-            margin: 55px auto 70px;
+        .nav a {
+            color: #dbe7e7;
+            text-decoration: none;
+            padding: 12px 10px;
+            border-radius: 5px;
+            font-size: 14px;
         }
 
-        .intro {
-            margin-bottom: 32px;
+        .nav a:hover,
+        .nav a.active {
+            background: #28575b;
+            color: white;
         }
 
-        .intro h1 {
-            font-size: 36px;
-            font-weight: 700;
-            color: #292d2a;
-            letter-spacing: -1px;
-            margin-bottom: 8px;
+        .main {
+            flex: 1;
+            padding: 35px 45px;
+            overflow-x: hidden;
         }
 
-        .intro p {
-            font-size: 15px;
-            color: #777b75;
-        }
-
-        .top-actions {
+        .topbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 18px;
+            margin-bottom: 35px;
         }
 
-        .section-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #414740;
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #173f43;
         }
 
-        .task-count {
-            color: #858981;
-            font-size: 13px;
-            margin-left: 6px;
+        .page-subtitle {
+            margin-top: 7px;
+            font-size: 14px;
+            color: #718083;
         }
 
         .add-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 11px 18px;
-            border-radius: 8px;
-            background: #607568;
-            color: #ffffff;
+            background: #173f43;
+            color: white;
             text-decoration: none;
-            font-size: 13px;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 14px;
             font-weight: 600;
-            transition: 0.2s ease;
         }
 
         .add-button:hover {
-            background: #50655a;
+            background: #28575b;
         }
 
         .success {
-            margin-bottom: 25px;
+            background: #dceee8;
+            color: #286052;
+            border-left: 4px solid #438878;
             padding: 13px 16px;
-            background: #edf4ef;
-            border: 1px solid #d6e4da;
-            color: #58705f;
-            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat {
+            background: white;
+            border: 1px solid #dfe5e6;
+            padding: 22px;
+            border-radius: 6px;
+        }
+
+        .stat-label {
+            color: #7a888a;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .stat-number {
+            font-size: 30px;
+            font-weight: 700;
+            color: #173f43;
+        }
+
+        .content-card {
+            background: white;
+            border: 1px solid #dfe5e6;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e6eaeb;
+        }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #263f42;
+        }
+
+        .card-link {
+            color: #39777a;
+            text-decoration: none;
             font-size: 13px;
         }
 
         .task-list {
-            background: #ffffff;
-            border: 1px solid #e5e2da;
-            border-radius: 12px;
-            overflow: hidden;
+            width: 100%;
         }
 
-        .task {
+        .task-row {
             display: grid;
-            grid-template-columns: minmax(0, 1fr) auto auto;
+            grid-template-columns: 2fr 1.2fr 1fr 1fr;
             align-items: center;
-            gap: 25px;
-            padding: 22px 24px;
+            gap: 15px;
+            padding: 18px 24px;
+            border-bottom: 1px solid #edf0f1;
         }
 
-        .task + .task {
-            border-top: 1px solid #eeece6;
-        }
-
-        .task:hover {
-            background: #fcfcfa;
+        .task-row:last-child {
+            border-bottom: none;
         }
 
         .task-name {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
-            color: #353a35;
-            margin-bottom: 6px;
+            color: #263238;
         }
 
-        .description {
-            font-size: 13px;
-            line-height: 1.5;
-            color: #81857e;
-        }
-
-        .due-date {
+        .task-description {
+            margin-top: 5px;
             font-size: 12px;
-            color: #9a9d96;
-            margin-top: 7px;
+            color: #879294;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .date {
+            font-size: 13px;
+            color: #657477;
         }
 
         .status {
             display: inline-block;
-            padding: 6px 11px;
-            border-radius: 20px;
+            width: fit-content;
+            padding: 5px 10px;
+            border-radius: 3px;
             font-size: 11px;
             font-weight: 600;
-            white-space: nowrap;
         }
 
-        .status.pending {
-            background: #f5efe2;
-            color: #90724a;
+        .pending {
+            background: #f3ead1;
+            color: #80672a;
         }
 
-        .status.completed {
-            background: #e9f1eb;
-            color: #55705d;
+        .completed {
+            background: #dceee8;
+            color: #286052;
         }
 
         .actions {
             display: flex;
-            gap: 7px;
+            justify-content: flex-end;
+            gap: 12px;
         }
 
-        .action {
-            min-width: 58px;
-            height: 34px;
-            padding: 0 11px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 7px;
-            font-family: 'DM Sans', sans-serif;
+        .actions a,
+        .actions button {
+            background: none;
+            border: none;
+            font-family: inherit;
             font-size: 12px;
-            font-weight: 600;
-            text-decoration: none;
             cursor: pointer;
-            transition: 0.2s ease;
+            text-decoration: none;
         }
 
         .edit {
-            background: #f2f4f1;
-            border: 1px solid #dce1dc;
-            color: #596b5e;
-        }
-
-        .edit:hover {
-            background: #e9eee9;
+            color: #39777a;
         }
 
         .delete {
-            background: #faf1ef;
-            border: 1px solid #ecd9d5;
-            color: #a06c63;
-        }
-
-        .delete:hover {
-            background: #f5e6e2;
+            color: #a04d4d;
         }
 
         .empty {
             text-align: center;
-            padding: 65px 25px;
-        }
-
-        .empty h2 {
-            font-size: 20px;
-            color: #414740;
-            margin-bottom: 8px;
-        }
-
-        .empty p {
-            color: #888c85;
+            padding: 55px 20px;
+            color: #879294;
             font-size: 14px;
-            margin-bottom: 20px;
         }
 
-        @media (max-width: 750px) {
-            .header {
-                padding: 20px 5%;
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 190px;
             }
 
-            .container {
-                width: 92%;
-                margin-top: 40px;
+            .main {
+                padding: 30px 25px;
             }
 
-            .intro h1 {
-                font-size: 31px;
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
             }
 
-            .top-actions {
+            .task-row {
+                grid-template-columns: 2fr 1fr 1fr;
+            }
+
+            .actions {
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 20px;
+            }
+
+            .brand {
+                margin-bottom: 20px;
+            }
+
+            .nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .main {
+                padding: 25px 18px;
+            }
+
+            .topbar {
                 align-items: flex-start;
                 gap: 15px;
                 flex-direction: column;
             }
 
-            .add-button {
-                width: 100%;
+            .stats {
+                grid-template-columns: 1fr 1fr;
             }
 
-            .task {
-                grid-template-columns: 1fr;
-                gap: 13px;
+            .task-row {
+                display: block;
+            }
+
+            .task-row > div {
+                margin-bottom: 10px;
             }
 
             .actions {
-                width: 100%;
-            }
-
-            .action {
-                flex: 1;
+                margin-top: 12px;
             }
         }
     </style>
@@ -278,15 +321,28 @@
 
 <body>
 
-    <header class="header">
-        <div class="header-inner">
-            <div class="brand">
-                Task<span>List</span>
-            </div>
-        </div>
-    </header>
+<div class="layout">
 
-    <main class="container">
+    <aside class="sidebar">
+        <div class="brand">TASKLIST</div>
+
+        <nav class="nav">
+            <a href="{{ route('tasks.index') }}" class="active">Dashboard</a>
+            <a href="{{ route('tasks.index') }}">My Tasks</a>
+            <a href="{{ route('tasks.create') }}">Add Task</a>
+        </nav>
+    </aside>
+
+    <main class="main">
+
+        <div class="topbar">
+            <div>
+                <h1 class="page-title">Dashboard</h1>
+                <p class="page-subtitle">Keep track of your tasks and upcoming work.</p>
+            </div>
+
+            <a href="{{ route('tasks.create') }}" class="add-button">+ Add Task</a>
+        </div>
 
         @if(session('success'))
             <div class="success">
@@ -294,103 +350,122 @@
             </div>
         @endif
 
-        <section class="intro">
-            <h1>My tasks</h1>
-            <p>Keep track of your work and stay on top of your deadlines.</p>
-        </section>
+        <section class="stats">
 
-        <div class="top-actions">
-            <div>
-                <span class="section-title">All tasks</span>
-                <span class="task-count">
-                    {{ $tasks->count() }}
-                    {{ $tasks->count() == 1 ? 'task' : 'tasks' }}
-                </span>
+            <div class="stat">
+                <div class="stat-label">Total Tasks</div>
+                <div class="stat-number">{{ $totalTasks }}</div>
             </div>
 
-            <a href="/tasks/create" class="add-button">
-                Add task
-            </a>
-        </div>
+            <div class="stat">
+                <div class="stat-label">Pending</div>
+                <div class="stat-number">{{ $pendingTasks }}</div>
+            </div>
 
-        <section class="task-list">
+            <div class="stat">
+                <div class="stat-label">Completed</div>
+                <div class="stat-number">{{ $completedTasks }}</div>
+            </div>
 
-            @forelse($tasks as $task)
+            <div class="stat">
+                <div class="stat-label">Overdue</div>
+                <div class="stat-number">{{ $overdueTasks }}</div>
+            </div>
 
-                <div class="task">
+        </section>
 
-                    <div>
-                        <div class="task-name">
-                            {{ $task->task_name }}
+        <section class="content-card">
+
+            <div class="card-header">
+                <div class="card-title">Recent Tasks</div>
+
+                <a href="{{ route('tasks.index') }}" class="card-link">
+                    View all
+                </a>
+            </div>
+
+            @if($tasks->count())
+
+                <div class="task-list">
+
+                    @foreach($tasks as $task)
+
+                        <div class="task-row">
+
+                            <div>
+                                <div class="task-name">
+                                    {{ $task->task_name }}
+                                </div>
+
+                                @if($task->description)
+                                    <div class="task-description">
+                                        {{ $task->description }}
+                                    </div>
+                                @endif
+                            </div>
+
+                            <div>
+                                @if($task->status === 'Completed')
+                                    <span class="status completed">
+                                        Completed
+                                    </span>
+                                @else
+                                    <span class="status pending">
+                                        Pending
+                                    </span>
+                                @endif
+                            </div>
+
+                            <div class="date">
+                                {{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('M d, Y') : 'No date' }}
+                            </div>
+
+                            <div class="actions">
+
+                                <a
+                                    href="{{ route('tasks.edit', $task) }}"
+                                    class="edit"
+                                >
+                                    Edit
+                                </a>
+
+                                <form
+                                    action="{{ route('tasks.destroy', $task) }}"
+                                    method="POST"
+                                >
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button
+                                        type="submit"
+                                        class="delete"
+                                        onclick="return confirm('Delete this task?')"
+                                    >
+                                        Delete
+                                    </button>
+                                </form>
+
+                            </div>
+
                         </div>
 
-                        @if($task->description)
-                            <div class="description">
-                                {{ $task->description }}
-                            </div>
-                        @endif
-
-                        @if($task->due_date)
-                            <div class="due-date">
-                                Due {{ \Carbon\Carbon::parse($task->due_date)->format('M d, Y') }}
-                            </div>
-                        @endif
-                    </div>
-
-                    <div>
-                        <span class="status {{ strtolower($task->status) }}">
-                            {{ $task->status }}
-                        </span>
-                    </div>
-
-                    <div class="actions">
-
-                        <a
-                            href="/tasks/{{ $task->id }}/edit"
-                            class="action edit"
-                        >
-                            Edit
-                        </a>
-
-                        <form
-                            action="/tasks/{{ $task->id }}"
-                            method="POST"
-                            onsubmit="return confirm('Are you sure you want to delete this task?');"
-                        >
-                            @csrf
-                            @method('DELETE')
-
-                            <button
-                                type="submit"
-                                class="action delete"
-                            >
-                                Delete
-                            </button>
-                        </form>
-
-                    </div>
+                    @endforeach
 
                 </div>
 
-            @empty
+            @else
 
                 <div class="empty">
-                    <h2>No tasks yet</h2>
-
-                    <p>
-                        Add a task to get started.
-                    </p>
-
-                    <a href="/tasks/create" class="add-button">
-                        Add task
-                    </a>
+                    <p>No tasks have been added yet.</p>
                 </div>
 
-            @endforelse
+            @endif
 
         </section>
 
     </main>
+
+</div>
 
 </body>
 </html>
